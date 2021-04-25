@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/starbuzz/data"
+	"github.com/microservices/StarBuzz/data"
 )
 
 type Products struct {
