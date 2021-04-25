@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/starbuzz/data"
 )
 
 type Products struct {
@@ -13,6 +16,15 @@ func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
 }
 
-func (*Products) ServeHttp(rw http.ResponseWriter, r *http.Request) {
-	data
+func (*Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	productList := data.GetProducts()
+	d, err := json.Marshal(productList)
+
+	if err != nil {
+		http.Error(rw, "Unable to find Products", http.StatusInternalServerError)
+		return
+	}
+
+	rw.Write(d)
+
 }

@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/go-microservices/StarBuzz/handlers"
+	"github.com/starbuzz/handlers"
 )
 
 func main() {
