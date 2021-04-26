@@ -21,10 +21,16 @@ func (p *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.Method == http.MethodPost {
+		p.addProduct(rw, r)
+		return
+	}
+
 	rw.WriteHeader(http.StatusMethodNotAllowed)
 }
 
 func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("Handling GET method")
 	productList := data.GetProducts()
 	err := productList.ToJSON(rw)
 
@@ -32,4 +38,19 @@ func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "Unable to find Products", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (p *Products) addProduct(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("Handling POST method")
+	prod := &data.Product{}
+	err := prod.FromJSON(r.Body)
+
+	if err != nil {
+		http.Error(rw, "Unable to store new product!", http.StatusBadRequest)
+	}
+
+	p.l.Printf("Product %#v", prod)
+	data.AddProduct(prod)
+
+	prod.ToJSON(rw)
 }
