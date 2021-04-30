@@ -1,3 +1,17 @@
+//	Package classification of Product API
+//
+//	Documentation for Product API
+//
+//	Schemes: http
+//	Basepath: /
+//	Version: 1.0.0
+//
+//	Consumes:
+//	- application/json
+//
+//	Produces:
+//	- application/json
+//	swagger:meta
 package handlers
 
 import (
@@ -11,6 +25,14 @@ import (
 	"github.com/microservices/StarBuzz/data"
 )
 
+//	A list of products returns in the response
+//	swagger:response productResponse
+type productResponse struct {
+	//	All products in the system
+	//	in: body
+	Body []data.Product
+}
+
 type Products struct {
 	l *log.Logger
 }
@@ -21,6 +43,10 @@ func NewProducts(l *log.Logger) *Products {
 
 type KeyProduct struct{}
 
+//	swagger:route GET /products products listProducts
+//	Returns a list of products
+//	responses:
+//		200:productsResponse
 func (p Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handling GET method")
 	productList := data.GetProducts()
